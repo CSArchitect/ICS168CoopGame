@@ -13,7 +13,11 @@ namespace UnityStandardAssets._2D
 
         private Transform m_GroundCheck;    // A position marking where to check if the player is grounded.
         const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
+
+        [SyncVar]
         private bool m_Grounded;            // Whether or not the player is grounded.
+
+
         private Transform m_CeilingCheck;   // A position marking where to check for ceilings
         const float k_CeilingRadius = .01f; // Radius of the overlap circle to determine if the player can stand up
         private Animator m_Anim;            // Reference to the player's animator component.
@@ -30,23 +34,32 @@ namespace UnityStandardAssets._2D
         }
 
         private void Start() {
-
+            if ((isServer && isLocalPlayer) || (!isServer && !isLocalPlayer)) {
+                gameObject.layer = 8;
+                m_WhatIsGround = 0 | (1 << 8);
+                m_WhatIsGround = m_WhatIsGround | (1 << 9);
+                m_WhatIsGround = m_WhatIsGround | (1 << 10);
+                m_WhatIsGround = m_WhatIsGround | (1 << 12);
+            }
+            else {
+                gameObject.layer = 9;
+                m_WhatIsGround = 0 | (1 << 8);
+                m_WhatIsGround = m_WhatIsGround | (1 << 9);
+                m_WhatIsGround = m_WhatIsGround | (1 << 11);
+                m_WhatIsGround = m_WhatIsGround | (1 << 12);
+            }
         }
 
 
         private void FixedUpdate()
         {
+            
             if (!isLocalPlayer) {
                 return;
             }
-            if (isServer) {
-                gameObject.layer = 8;
-            }
-            else {
-                gameObject.layer = 9;
-            }
 
 
+            
 
             m_Grounded = false;
 

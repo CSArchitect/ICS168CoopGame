@@ -11,14 +11,15 @@ public class Visibility : NetworkBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        if (isLocalPlayer) {
+        if (true){//isLocalPlayer) {
             lights.SetActive(false);
         }
+        setColor();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        setColor();
+        
     }
 
     void onConnected() {
@@ -28,26 +29,49 @@ public class Visibility : NetworkBehaviour {
     void setColor() {
         if (isServer) {
             if (isLocalPlayer) {
-                gameObject.GetComponent<SpriteRenderer>().material = blue;
+                gameObject.GetComponentInChildren<SpriteRenderer>().material = blue;
                 lights.GetComponent<Light>().color = blue.color;
+                SetLayerR(gameObject, 8);
             }
             else {
-                gameObject.GetComponent<SpriteRenderer>().material = red;
+                gameObject.GetComponentInChildren<SpriteRenderer>().material = red;
                 lights.GetComponent<Light>().color = red.color;
-
+                SetLayerR(gameObject, 9);
             }
         }
         else {
             if (isLocalPlayer) {
-                gameObject.GetComponent<SpriteRenderer>().material = red;
+                gameObject.GetComponentInChildren<SpriteRenderer>().material = red;
                 lights.GetComponent<Light>().color = red.color;
-
+                SetLayerR(gameObject, 9);
             }
             else {
-                gameObject.GetComponent<SpriteRenderer>().material = blue;
+                gameObject.GetComponentInChildren<SpriteRenderer>().material = blue;
                 lights.GetComponent<Light>().color = blue.color;
-
+                SetLayerR(gameObject, 8);
             }
+        }
+    }
+
+    void SetLayerR(GameObject obj, int newLayer) {
+        obj.layer = newLayer;
+        foreach (Transform child in obj.transform) {
+            if (null == child) {
+                continue;
+            }
+            SetLayerR(child.gameObject, newLayer);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D other) {
+        if (other.gameObject.tag == "Player") {
+            transform.parent = other.transform;
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D other) {
+        if (other.gameObject.tag == "Player") {
+            transform.parent = null;
         }
     }
 }

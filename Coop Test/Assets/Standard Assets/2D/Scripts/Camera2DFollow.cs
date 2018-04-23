@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
-
+using UnityEngine.Networking;
 namespace UnityStandardAssets._2D
 {
-    public class Camera2DFollow : MonoBehaviour
+    public class Camera2DFollow : NetworkBehaviour
     {
         public Transform target;
         public float damping = 1;
@@ -19,6 +19,14 @@ namespace UnityStandardAssets._2D
         // Use this for initialization
         private void Start()
         {
+            GameObject[] players;
+            players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject p in players) {
+                if (p.GetComponent<NetworkIdentity>().isLocalPlayer) {
+                    target = p.transform;
+                }
+            }
+            
             m_LastTargetPosition = target.position;
             m_OffsetZ = (transform.position - target.position).z;
             transform.parent = null;

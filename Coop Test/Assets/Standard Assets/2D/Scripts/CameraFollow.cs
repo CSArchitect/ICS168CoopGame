@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
-
+using UnityEngine.Networking;
 
 namespace UnityStandardAssets._2D
 {
-    public class CameraFollow : MonoBehaviour
+    public class CameraFollow : NetworkBehaviour
     {
         public float xMargin = 1f; // Distance in the x axis the player can move before the camera follows.
         public float yMargin = 1f; // Distance in the y axis the player can move before the camera follows.
@@ -16,10 +16,18 @@ namespace UnityStandardAssets._2D
         private Transform m_Player; // Reference to the player's transform.
 
 
-        private void Awake()
+        private void Start()
         {
             // Setting up the reference.
-            m_Player = GameObject.FindGameObjectWithTag("Player").transform;
+            GameObject[] players;
+            players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject p in players) {
+                if (p.GetComponent<NetworkIdentity>().isLocalPlayer) {
+                    m_Player = p.transform;
+                }
+            }
+            
+            //m_Player = GameObject.FindGameObjectsWithTag("Player").transform;
         }
 
 
