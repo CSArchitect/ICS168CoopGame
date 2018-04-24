@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     public bool canDoubleJump;
     private bool isDoubleJumping = false;
 
+    public bool canStickToWalls;
     public float wallSlideSpeedMax = 3f;
     public float wallStickTime = .25f;
     private float timeToWallUnstick;
@@ -104,7 +105,7 @@ public class Player : MonoBehaviour
     {
         wallDirX = (controller.collisions.left) ? -1 : 1;
         wallSliding = false;
-        if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below && velocity.y < 0)
+        if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below && velocity.y < 0 && canStickToWalls)
         {
             wallSliding = true;
 

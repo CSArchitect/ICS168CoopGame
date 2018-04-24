@@ -13,6 +13,7 @@ public class Controller2D : RaycastController
     public override void Start()
     {
         base.Start();
+        Physics.IgnoreLayerCollision(gameObject.layer, gameObject.layer);
 
         collisions.faceDir = 1;
     }
