@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 
 public class Controller2D : RaycastController
 {
@@ -13,7 +14,20 @@ public class Controller2D : RaycastController
     public override void Start()
     {
         base.Start();
-        Physics.IgnoreLayerCollision(gameObject.layer, gameObject.layer);
+        if ((isServer && isLocalPlayer) || (!isServer && !isLocalPlayer))
+        {
+            gameObject.layer = 8;
+            collisionMask = 0 | (1 << 9);
+            collisionMask = collisionMask | (1 << 10);
+            collisionMask = collisionMask | (1 << 12);
+        }
+        else
+        {
+            gameObject.layer = 9;
+            collisionMask = 0 | (1 << 8);
+            collisionMask = collisionMask | (1 << 11);
+            collisionMask = collisionMask | (1 << 12);
+        }
 
         collisions.faceDir = 1;
     }

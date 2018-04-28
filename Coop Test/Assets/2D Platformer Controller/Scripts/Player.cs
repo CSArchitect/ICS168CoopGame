@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Controller2D))]
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
     public float maxJumpHeight = 4f;
     public float minJumpHeight = 1f;
@@ -44,6 +45,11 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
         CalculateVelocity();
         HandleWallSliding();
 
