@@ -15,7 +15,8 @@ public class Player : NetworkBehaviour
     public Vector2 wallJumpOff;
     public Vector2 wallLeap;
 
-    public bool canDoubleJump;
+    public bool canTripleJump;
+    private int jumpCount;
     private bool isDoubleJumping = false;
 
     public bool canStickToWalls;
@@ -46,6 +47,7 @@ public class Player : NetworkBehaviour
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        jumpCount = 0;
     }
 
     private void Update()
@@ -109,9 +111,15 @@ public class Player : NetworkBehaviour
         {
             velocity.y = maxJumpVelocity;
             isDoubleJumping = false;
+            jumpCount = 0;
         }
-        if (canDoubleJump && !controller.collisions.below && !isDoubleJumping && !wallSliding)
+        if (jumpCount >= 2)
+            canTripleJump = false;
+        else
+            canTripleJump = true;
+        if (canTripleJump && !controller.collisions.below &&  !wallSliding)
         {
+            jumpCount++;
             velocity.y = maxJumpVelocity;
             isDoubleJumping = true;
         }
