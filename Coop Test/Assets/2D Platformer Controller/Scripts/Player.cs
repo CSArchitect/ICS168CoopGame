@@ -34,6 +34,9 @@ public class Player : NetworkBehaviour
     private Vector2 directionalInput;
     private bool wallSliding;
     private int wallDirX;
+    private Rigidbody2D m_Rigidbody2D;
+    private Animator m_Anim;
+
 
     private void Start()
     {
@@ -41,6 +44,8 @@ public class Player : NetworkBehaviour
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
+        m_Anim = GetComponent<Animator>();
+        m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
@@ -58,6 +63,19 @@ public class Player : NetworkBehaviour
         if (controller.collisions.above || controller.collisions.below)
         {
             velocity.y = 0f;
+        }
+
+        m_Anim.SetBool("Crouch", false);
+        m_Anim.SetBool("Ground", controller.collisions.below);
+
+        // Set the vertical animation
+        m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
+
+        if (controller.collisions.below)
+        {
+            // The Speed animator parameter is set to the absolute value of the horizontal input.
+            m_Anim.SetFloat("Speed", Mathf.Abs(m_Rigidbody2D.velocity.x));
+            print(m_Rigidbody2D.velocity.x);
         }
     }
 

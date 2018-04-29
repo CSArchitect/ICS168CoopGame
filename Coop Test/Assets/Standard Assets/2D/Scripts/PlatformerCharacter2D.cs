@@ -56,10 +56,7 @@ namespace UnityStandardAssets._2D
             
             if (!isLocalPlayer) {
                 return;
-            }
-
-
-            
+            }         
 
             m_Grounded = false;
 

@@ -5,8 +5,8 @@ public class RaycastController : NetworkBehaviour
 {
     public LayerMask collisionMask;
 
-    public const float skinWidth = .015f;
-    private const float dstBetweenRays = .25f;
+    public  const float skinWidth = .015f;
+    private const  float dstBetweenRays = .25f;
 
     [HideInInspector]
     public int horizontalRayCount;
