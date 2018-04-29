@@ -30,6 +30,7 @@ public class Controller2D : RaycastController
         }
 
         collisions.faceDir = 1;
+        Camera.main.GetComponent<SmashCamera>().AddPlayers(gameObject);
     }
 
     public void Move(Vector2 moveAmount, bool standingOnPlatform = false)
