@@ -37,6 +37,7 @@ public class Player : NetworkBehaviour
     private int wallDirX;
     private Rigidbody2D m_Rigidbody2D;
     private Animator m_Anim;
+    private AudioSource landingAudio;
 
 
     private void Start()
@@ -48,6 +49,7 @@ public class Player : NetworkBehaviour
         m_Anim = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
         jumpCount = 0;
+        landingAudio = GetComponent<AudioSource>();
     }
 
     private void Update()

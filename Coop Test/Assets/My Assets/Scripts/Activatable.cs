@@ -16,6 +16,8 @@ public class Activatable : NetworkBehaviour {
     private bool clientVisible;
     private bool serverInteractable;
     private bool clientInteractable;
+    private AudioSource doorOpenAudio;
+    private AudioSource doorCloseAudio;
     // Use this for initialization
     void Start() {
         origRendered = gameObject.GetComponentInChildren<SpriteRenderer>().enabled;
@@ -24,6 +26,11 @@ public class Activatable : NetworkBehaviour {
         clientVisible = gameObject.GetComponent<PlatformVisibility>().clientVisible;
         serverInteractable = gameObject.GetComponent<PlatformVisibility>().serverInteractable;
         clientInteractable = gameObject.GetComponent<PlatformVisibility>().clientInteractable;
+
+        AudioSource[] audios = gameObject.GetComponents<AudioSource>();
+
+        doorOpenAudio = audios[0];
+        doorCloseAudio = audios[1];
     }
 
     // Update is called once per frame
@@ -71,6 +78,7 @@ public class Activatable : NetworkBehaviour {
             foreach (GameObject T in targets) {
                 T.GetComponent<Activatable>().activated = true;
             }
+            doorOpenAudio.Play();
         }
     }
 
@@ -79,6 +87,7 @@ public class Activatable : NetworkBehaviour {
             foreach (GameObject T in targets) {
                 T.GetComponent<Activatable>().activated = false;
             }
+            doorCloseAudio.Play();
         }
     }
     
