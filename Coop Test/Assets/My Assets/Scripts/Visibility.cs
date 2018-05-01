@@ -31,11 +31,13 @@ public class Visibility : NetworkBehaviour {
             if (isLocalPlayer) {
                 gameObject.GetComponentInChildren<SpriteRenderer>().material = blue;
                 lights.GetComponent<Light>().color = blue.color;
+                //gameObject.GetComponent<Player>().canTripleJump = true;
                 SetLayerR(gameObject, 8);
             }
             else {
                 gameObject.GetComponentInChildren<SpriteRenderer>().material = red;
                 lights.GetComponent<Light>().color = red.color;
+                //gameObject.GetComponent<Player>().canStickToWalls = true;
                 SetLayerR(gameObject, 9);
             }
         }
@@ -43,11 +45,13 @@ public class Visibility : NetworkBehaviour {
             if (isLocalPlayer) {
                 gameObject.GetComponentInChildren<SpriteRenderer>().material = red;
                 lights.GetComponent<Light>().color = red.color;
+                //gameObject.GetComponent<Player>().canStickToWalls = true;
                 SetLayerR(gameObject, 9);
             }
             else {
                 gameObject.GetComponentInChildren<SpriteRenderer>().material = blue;
                 lights.GetComponent<Light>().color = blue.color;
+                //gameObject.GetComponent<Player>().canTripleJump = true;
                 SetLayerR(gameObject, 8);
             }
         }

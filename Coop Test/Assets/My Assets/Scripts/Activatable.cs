@@ -5,28 +5,42 @@ using UnityEngine.Networking;
 public class Activatable : NetworkBehaviour {
 
     public bool pressurePlate;
+    public bool spawner;
     public bool door;
-
+    
     public GameObject[] targets;
 
+    [SyncVar]
     public bool activated = false;
+    [SyncVar]
     private bool origRendered;
+    [SyncVar]
     private bool origInteract;
+    [SyncVar]
     private bool serverVisible;
+    [SyncVar]
     private bool clientVisible;
+    [SyncVar]
     private bool serverInteractable;
+    [SyncVar]
     private bool clientInteractable;
     private AudioSource doorOpenAudio;
     private AudioSource doorCloseAudio;
     // Use this for initialization
     void Start() {
+        /*
         origRendered = gameObject.GetComponentInChildren<SpriteRenderer>().enabled;
         origInteract = gameObject.GetComponentInChildren<BoxCollider2D>().enabled;
         serverVisible = gameObject.GetComponent<PlatformVisibility>().serverVisible;
         clientVisible = gameObject.GetComponent<PlatformVisibility>().clientVisible;
         serverInteractable = gameObject.GetComponent<PlatformVisibility>().serverInteractable;
         clientInteractable = gameObject.GetComponent<PlatformVisibility>().clientInteractable;
-
+        */
+        if (spawner) {
+            foreach (GameObject T in targets) {
+                T.SetActive(false);
+            }
+        }
         AudioSource[] audios = gameObject.GetComponents<AudioSource>();
 
         doorOpenAudio = audios[0];
@@ -36,7 +50,7 @@ public class Activatable : NetworkBehaviour {
     // Update is called once per frame
     void Update() {
         if (door) {
-            doorLogic();
+            //doorLogic();
         }
     }
 
@@ -76,7 +90,13 @@ public class Activatable : NetworkBehaviour {
     void OnTriggerEnter2D(Collider2D other){
         if (pressurePlate) {
             foreach (GameObject T in targets) {
-                T.GetComponent<Activatable>().activated = true;
+                //T.GetComponent<Activatable>().activated = true;
+                if (T.activeInHierarchy) {
+                    T.SetActive(false);
+                }
+                else {
+                    T.SetActive(true);
+                }
             }
             doorOpenAudio.Play();
         }
@@ -85,7 +105,13 @@ public class Activatable : NetworkBehaviour {
     void OnTriggerExit2D(Collider2D other) {
         if (pressurePlate) {
             foreach (GameObject T in targets) {
-                T.GetComponent<Activatable>().activated = false;
+                //T.GetComponent<Activatable>().activated = false;
+                if (!T.activeInHierarchy) {
+                    T.SetActive(true);
+                }
+                else {
+                    T.SetActive(false);
+                }
             }
             doorCloseAudio.Play();
         }

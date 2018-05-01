@@ -40,7 +40,7 @@ public class Player : NetworkBehaviour
     private Animator m_Anim;
     private AudioSource landingAudio;
 
-    private Vector3 lastPos;
+    public Vector3 lastPos;
 
 
     private void Start()
@@ -53,6 +53,8 @@ public class Player : NetworkBehaviour
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
         jumpCount = 0;
         landingAudio = GetComponent<AudioSource>();
+        
+        lastPos = transform.position;
     }
 
     private void OnBecameInvisible() {
@@ -66,9 +68,7 @@ public class Player : NetworkBehaviour
             return;
         }
 
-        if (controller.collisions.below) {
-            lastPos = transform.position;
-        }
+
 
 
         CalculateVelocity();
@@ -91,7 +91,7 @@ public class Player : NetworkBehaviour
         {
             // The Speed animator parameter is set to the absolute value of the horizontal input.
             m_Anim.SetFloat("Speed", Mathf.Abs(m_Rigidbody2D.velocity.x));
-            print(m_Rigidbody2D.velocity.x);
+            //print(m_Rigidbody2D.velocity.x);
         }
     }
 

@@ -7,9 +7,16 @@ public class PlatformVisibility : NetworkBehaviour {
 
     //public bool serverSide = false;
     //public bool clientSide = false;
+    [SyncVar]
     public bool serverVisible = false;
+    
+    [SyncVar]
     public bool clientVisible = false;
+
+    [SyncVar]
     public bool serverInteractable = false;
+
+    [SyncVar]
     public bool clientInteractable = false;
     //private bool server = false;
     //private bool client = false;
