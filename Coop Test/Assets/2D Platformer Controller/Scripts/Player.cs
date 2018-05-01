@@ -18,6 +18,7 @@ public class Player : NetworkBehaviour
     public bool canTripleJump;
     private int jumpCount;
     private bool isDoubleJumping = false;
+    private bool isTripleJumping = false;
 
     public bool canStickToWalls;
     public float wallSlideSpeedMax = 3f;
@@ -39,6 +40,8 @@ public class Player : NetworkBehaviour
     private Animator m_Anim;
     private AudioSource landingAudio;
 
+    private Vector3 lastPos;
+
 
     private void Start()
     {
@@ -52,12 +55,21 @@ public class Player : NetworkBehaviour
         landingAudio = GetComponent<AudioSource>();
     }
 
+    private void OnBecameInvisible() {
+        transform.position = lastPos;
+    }
+
     private void Update()
     {
         if (!isLocalPlayer)
         {
             return;
         }
+
+        if (controller.collisions.below) {
+            lastPos = transform.position;
+        }
+
 
         CalculateVelocity();
         HandleWallSliding();
@@ -108,18 +120,22 @@ public class Player : NetworkBehaviour
                 velocity.y = wallLeap.y;
             }
             isDoubleJumping = false;
+            isTripleJumping = false;
         }
         if (controller.collisions.below)
         {
             velocity.y = maxJumpVelocity;
             isDoubleJumping = false;
+            isTripleJumping = false;
             jumpCount = 0;
         }
         if (jumpCount >= 2)
-            canTripleJump = false;
+            //canTripleJump = false;
+            isTripleJumping = true;
         else
-            canTripleJump = true;
-        if (canTripleJump && !controller.collisions.below &&  !wallSliding)
+            //canTripleJump = true;
+            isTripleJumping = false;
+        if (!isTripleJumping && canTripleJump && !controller.collisions.below &&  !wallSliding)
         {
             jumpCount++;
             velocity.y = maxJumpVelocity;
