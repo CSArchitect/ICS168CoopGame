@@ -33,6 +33,9 @@ public class PlatformVisibility : NetworkBehaviour {
         else if (serverInteractable && clientInteractable) {
             SetLayerR(gameObject, 12);
         }
+        else if (!serverInteractable && !clientInteractable) {
+            SetLayerR(gameObject, 13);
+        }
 	}
 	
 	// Update is called once per frame
